@@ -6,8 +6,6 @@ import sendEmail from '../libs/hepler/Email/emaliSend';
 import bcrypt from "bcrypt"
 import { createToken } from '../libs/hepler/auth/jwtHelper';
 
-
-
 const SingUp = async (req: Request, res: Response) => {
     try {
         const { username, email, password, number, image } = await req.body;
@@ -25,7 +23,7 @@ const SingUp = async (req: Request, res: Response) => {
         const verfiyCodeExpier = new Date()
         verfiyCodeExpier.setHours(verfiyCodeExpier.getHours() + 1)
 
-        // checking Exist User
+        // checking Exist User by name
         if (userNameExist) {
             sendResponse<any>(res, {
                 statusCode: httpStatus.NOT_ACCEPTABLE, success: false, message: "User name is already used"
@@ -33,7 +31,7 @@ const SingUp = async (req: Request, res: Response) => {
 
         }
 
-
+        // checking Exist User by email
         if (emailExist) {
             sendResponse<any>(res, {
                 statusCode: httpStatus.NOT_ACCEPTABLE, success: false, message: "This email already use"
@@ -41,7 +39,7 @@ const SingUp = async (req: Request, res: Response) => {
 
         }
 
-        // checking Exist email
+        // checking Exist email and verified
         if (emailExist?.isVerfiyed) {
             sendResponse<any>(res, {
                 statusCode: httpStatus.NOT_ACCEPTABLE, success: false, message: "User already Vefiyed!"
@@ -62,10 +60,7 @@ const SingUp = async (req: Request, res: Response) => {
             })
 
             // Send verification email
-            const emaliSend = await sendEmail({ image: image, name: username, receiver: email, subject: "Email Verfication" })
-
-            console.log(emaliSend, "chceking reply");
-
+            await sendEmail({ image: image, name: username, receiver: email, subject: "Email Verfication", code: verfiyCode })
 
             sendResponse<any>(res, {
                 statusCode: httpStatus.OK, success: true, data: newUser, message: "Create Data Successfully",
@@ -87,7 +82,7 @@ const SignIn = async (req: Request, res: Response) => {
 
         const findUserByEmail = await Users.findOne({ email });
         if (!findUserByEmail) {
-            return sendResponse(res, {
+            return sendResponse<any>(res, {
                 statusCode: httpStatus.UNAUTHORIZED, success: false, data: null, message: "User not found"
             });
         }
@@ -95,7 +90,7 @@ const SignIn = async (req: Request, res: Response) => {
         const { password: hashPassword } = findUserByEmail;
         const isPasswordMatch = await bcrypt.compare(password, hashPassword);
         if (!isPasswordMatch) {
-            return sendResponse(res, {
+            return sendResponse<any>(res, {
                 statusCode: httpStatus.UNAUTHORIZED, success: false, data: null, message: "Password doesn't match."
             });
         }
@@ -108,13 +103,13 @@ const SignIn = async (req: Request, res: Response) => {
         // Create the token
         const token = createToken({ isVerfiyed, role, suspend, user_id });
 
-       
 
-        return sendResponse(res, {
+
+        return sendResponse<any>(res, {
             statusCode: httpStatus.OK, success: true, data: { token }, message: "User authenticated successfully"
         });
     } catch (error) {
-        return sendResponse(res, {
+        return sendResponse<any>(res, {
             statusCode: httpStatus.INTERNAL_SERVER_ERROR, success: false, data: error, message: "An error occurred"
         });
     }

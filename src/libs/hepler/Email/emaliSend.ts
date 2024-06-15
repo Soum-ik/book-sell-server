@@ -7,6 +7,7 @@ interface EmailCredentials {
     image: string;
     name: string;
     subject: string;
+    code: string;
 }
 
 const transporter = nodemailer.createTransport({
@@ -22,11 +23,11 @@ const sendVeficationEmail = async (data: EmailCredentials) => {
         from: EMAIL_HOST,
         to: data.receiver,
         subject: data.subject,
-        html: emailTemplate({ name: data.name, image: data.image, }), // Generate HTML content
+        html: emailTemplate({ name: data.name, image: data.image, code: data.code }), // Generate HTML content
     };
 
     try {
-        const info = await transporter.sendMail(mailOptions)
+        const info = await transporter.sendMail(mailOptions);
         return info
     } catch (error) {
         console.log("Error sending email:", error);

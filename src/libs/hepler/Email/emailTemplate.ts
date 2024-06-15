@@ -9,81 +9,89 @@ interface TemplateCredentials {
 export const emailTemplate = (data: TemplateCredentials) => {
 
     return `
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Verification</title>
-    <style>
+    <title>Email Sign-Up Confirmation</title>
+     <style>
         body {
             font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
         }
-        .email-container {
-            width: 100%;
+        .container {
             max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
+            margin: 20px auto;
             padding: 20px;
+            background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        .header {
+        h2 {
+            color: #333;
             text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #dddddd;
         }
-        .header img {
-            max-width: 150px;
-        }
-        .content {
-            padding: 20px 0;
-        }
-        .footer {
+        p {
+            color: #555;
+            font-size: 16px;
             text-align: center;
-            padding: 20px 0;
-            border-top: 1px solid #dddddd;
-            font-size: 12px;
-            color: #999999;
+            margin-bottom: 20px;
         }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
+        .verification-code {
+            font-size: 24px;
+            text-align: center;
             margin: 20px 0;
-            background-color: #28a745;
-            color: #ffffff;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .cta-button {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+            background-color: #007bff;
             text-decoration: none;
             border-radius: 5px;
-            cursor: pointer;
         }
-        @media (max-width: 600px) {
-            .email-container {
-                width: 100%;
+        .cta-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive Styles */
+        @media only screen and (max-width: 600px) {
+            .container {
                 padding: 10px;
+            }
+            .cta-button {
+                max-width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="email-container">
-        <div class="header">
-            <img src="${data.image}" alt="Logo">
+    <div class="container">
+
+        <h1> Welcome ${data.name}. Thank you for comming</h1>
+        <h2>Confirm Your Email</h2>
+        <p>Thank you for signing up! Please use the verification code below to activate your account:</p>
+        <div class="verification-code">
+            <!-- Replace this text with the actual verification code dynamically generated in your application -->
+           ${data.code}
         </div>
-        <div class="content">
-            <h1>Welcome, ${data.name}!</h1>
-            <p>Thank you for signing up. Please verify your email address by clicking the button below:</p>
-            <a  href=${data.code} class="button">Verify Email</a>
-            <p>If you did not sign up for this account, please ignore this email.</p>
-        </div>
-        <div class="footer">
-            <p>&copy; 2024 Team Stack. All rights reserved.</p>
-            <p>Team Stack. Medical Road, Sylhet</p>
-        </div>
+        <a href="#" class="cta-button">Verify Email</a>
+        <p>If you did not sign up for this service, please ignore this email.</p>
     </div>
 </body>
 </html>
+
     `;
 };
