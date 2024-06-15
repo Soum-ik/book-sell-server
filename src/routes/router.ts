@@ -1,6 +1,6 @@
 import express from 'express'
-import UserController from '../controller/User.controler'
-import BookController from '../controller/Book.controler'
+import UserController from '../controller/User.controller'
+import BookController from '../controller/Book.controller'
 import authenticateToken from '../middleware/auth';
 
 const router = express.Router()
