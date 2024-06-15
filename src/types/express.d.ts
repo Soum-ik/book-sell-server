@@ -1,14 +1,10 @@
-import { Request } from 'express';
+// src/typings/express.d.ts (or wherever your typings folder is located)
+import { JwtPayload } from 'jsonwebtoken';
 
-interface UserPayload {
-    user_id: string;
-    role: string;
-    isVerfiyed: boolean;
-    suspend: boolean;
-}
-
-declare module 'express-serve-static-core' {
-    interface Request {
-        user?: UserPayload;
+declare global {
+    namespace Express {
+        interface Request {
+            user?: JwtPayload; // Define your custom property and its type here
+        }
     }
 }

@@ -81,6 +81,9 @@ const SignIn = async (req: Request, res: Response) => {
         const { password, email } = req.body;
 
         const findUserByEmail = await Users.findOne({ email });
+
+
+
         if (!findUserByEmail) {
             return sendResponse<any>(res, {
                 statusCode: httpStatus.UNAUTHORIZED, success: false, data: null, message: "User not found"
@@ -96,12 +99,10 @@ const SignIn = async (req: Request, res: Response) => {
         }
 
         const { suspend, isVerfiyed, role } = findUserByEmail
-
-        // Convert user ID to string
-        const user_id = findUserByEmail._id.toString();
+        const id: String = findUserByEmail?.id
 
         // Create the token
-        const token = createToken({ isVerfiyed, role, suspend, user_id });
+        const token = createToken({ isVerfiyed, role, suspend, user_id: id });
 
 
 

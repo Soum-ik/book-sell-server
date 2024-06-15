@@ -2,6 +2,7 @@ import httpStatus, { NOT_FOUND } from "http-status"
 import { verifyToken } from "../libs/hepler/auth/jwtHelper"
 import type { Request, Response, NextFunction } from "express"
 import sendResponse from "../libs/utility/sendResponse"
+import type { JwtPayload } from "jsonwebtoken"
 
 const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
@@ -24,7 +25,7 @@ const authenticateToken = async (req: Request, res: Response, next: NextFunction
 
 
 
-    req.user = decoded;
+    req.user = decoded as JwtPayload
     next()
 
 }

@@ -1,31 +1,21 @@
 {
   "compilerOptions": {
-    // Enable latest features
-    "lib": ["ESNext", "DOM"],
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Node", // Use 'node' for backend Node.js modules
-    "jsx": "react-jsx",
-    "allowJs": true,
-
-    // Bundler mode
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "noEmit": true,
-
-    // Best practices
-    "strict": true,
-    "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true,
-
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false,
-
-    // Node.js specific settings
-    "esModuleInterop": true,
-    "outDir": "./dist",
-    "typeRoots": ["./node_modules/@types", "./src/types"]
-  }
+    "lib": ["ESNext", "DOM"],    // Libraries to include
+    "target": "ESNext",         // Target ECMAScript version
+    "module": "ESNext",         // Module system (ECMAScript modules)
+    "moduleResolution": "Node", // Module resolution strategy for Node.js
+    "jsx": "react-jsx",         // JSX transform (not used in Node.js, can be removed)
+    "allowJs": true,            // Allow JavaScript files to be compiled
+    "allowImportingTsExtensions": true, // Allow importing TypeScript files without extension
+    "verbatimModuleSyntax": true,       // Preserve the exact module syntax from input files
+    "noEmit": true,            // Do not emit compiled JavaScript (handled by bundler)
+    "strict": true,            // Enable all strict type-checking options
+    "skipLibCheck": true,      // Skip type-checking of declaration files from dependencies
+    "noFallthroughCasesInSwitch": true, // Disallow fallthrough cases in switch statements
+    "esModuleInterop": true,   // Enable interoperability between CommonJS and ES Modules
+    "outDir": "./dist",        // Output directory for compiled JavaScript files
+    "typeRoots": ["./node_modules/@types", "./src/types"] // Type definition roots
+  },
+  "include": ["src/**/*.ts"],   // Include TypeScript files from 'src' directory
+  "exclude": ["node_modules"]   // Exclude 'node_modules' directory from compilation
 }
