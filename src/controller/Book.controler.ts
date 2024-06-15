@@ -45,11 +45,11 @@ const createPost = async (req: Request, res: Response) => {
 // get all post 
 const getPost = async (req: Request, res: Response) => {
     try {
-        const result = await Posts.find({ isAccept: true });
+        const getBooks = await Books.find({ isAccept: true });
         sendResponse<any>(res, {
             statusCode: httpStatus.OK,
             success: true,
-            data: result,
+            data: getBooks,
             message: "Get post successfully",
         });
     } catch (error) {

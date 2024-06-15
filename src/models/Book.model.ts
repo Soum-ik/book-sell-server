@@ -6,7 +6,7 @@ export interface Book extends Document {
     userId: string,
     semester: string,
     totalBook: string,
-    price: string,
+    price: number,
     urgent: boolean,
     message: string,
     isAvaiableFullSet: boolean,
@@ -37,9 +37,10 @@ const BookSchema: Schema<Book> = new Schema<Book>({
         required: [true, "Total book count is required"]
     },
     price: {
-        type: String,
+        type: Number,
         required: [true, "Price is required"],
-        maxlength: 3
+        min: [1, "Price should be at least 1"],
+        max: [999, "Price should be less than 1000"]
     },
     urgent: {
         type: Boolean,
