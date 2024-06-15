@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 
-export interface Book extends Document {
+export interface Post extends Document {
     images: string[],
     userId: string,
     semester: string,
@@ -13,7 +13,7 @@ export interface Book extends Document {
     isAccept: boolean
 }
 
-const BookSchema: Schema<Book> = new Schema<Book>({
+const PostSchema: Schema<Post> = new Schema<Post>({
     images: {
         type: [String],
         required: [true, "Images are required"],
@@ -63,5 +63,5 @@ const BookSchema: Schema<Book> = new Schema<Book>({
     versionKey: false
 });
 
-const Book = mongoose.model<Book>("Book", BookSchema);
-export default Book;
+const Post = mongoose.model<Post>("Post", PostSchema);
+export default Post;

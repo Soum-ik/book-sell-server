@@ -1,8 +1,8 @@
 import httpStatus from "http-status";
-import Book from "../models/Book.model";
+import Post from "../models/Post.model";
 import sendResponse from '../libs/utility/sendResponse';
-import { raw, type Request, type Response } from 'express';
-import Books from "../models/Book.model";
+import { type Request, type Response } from 'express';
+
 import Users from "../models/User.model";
 
 
@@ -12,7 +12,7 @@ const createPost = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.user_id;
         console.log(userId, "checking user id");
-        
+
         const { images, semester, totalBook, price, urgent, message, isAvaiableFullSet } = req.body;
 
         if (images.length > 5 && images.length < 3) {
@@ -25,7 +25,7 @@ const createPost = async (req: Request, res: Response) => {
             });
         }
 
-        const post = await Book.create({ userId, images, semester, totalBook, price, urgent, message, isAvaiableFullSet });
+        const post = await Post.create({ userId, images, semester, totalBook, price, urgent, message, isAvaiableFullSet });
 
         // Handle successful creation
         sendResponse<any>(res, {
@@ -48,11 +48,11 @@ const createPost = async (req: Request, res: Response) => {
 // get all post 
 const getPost = async (req: Request, res: Response) => {
     try {
-        const getBooks = await Books.find({ isAccept: true });
+        const getPosts = await Post.find({ isAccept: true });
         sendResponse<any>(res, {
             statusCode: httpStatus.OK,
             success: true,
-            data: getBooks,
+            data: getPosts,
             message: "Get post successfully",
         });
     } catch (error) {
@@ -71,7 +71,7 @@ const getSingelPost = async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
 
-        const post = await Books.findById(id);
+        const post = await Post.findById(id);
 
         // If post is found, fetch the user based on post's userId
         if (!post) {
