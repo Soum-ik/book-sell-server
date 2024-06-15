@@ -1,5 +1,3 @@
-// src/database/database.ts (assuming this file structure)
-
 import mongoose, { type ConnectOptions } from "mongoose";
 import { MONGODB_CONNECTION } from "../../config/config.ts";
 
@@ -14,6 +12,10 @@ type DbConnection = () => Promise<void>;
 // MongoDB connection function
 export const dbConnection: DbConnection = async () => {
     try {
+        if (mongoose.connection.readyState === 1) {
+            console.log("Database already connected");
+            return;
+        }
         await mongoose.connect(MONGODB_CONNECTION, mongooseOptions);
         console.log("Database Connected");
     } catch (err) {

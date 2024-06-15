@@ -2,9 +2,9 @@ import express, { type Request, type Response, type Application, type NextFuncti
 import cors from 'cors'
 import cookieParser from "cookie-parser";
 import httpStatus from "http-status";
-import { PORT, REQUEST_LIMIT_NUMBER, REQUEST_LIMIT_TIME, WEB_CACHE } from './config/config';
+import { PORT, WEB_CACHE } from './config/config';
 import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
+
 import { dbConnection } from './libs/utility/db';
 import router from './routes/router';
 const app: Application = express()
@@ -27,8 +27,7 @@ app.use(helmet({
     contentSecurityPolicy: false,
     xDownloadOptions: false,
 }),)
-const limiter = rateLimit({ windowMs: REQUEST_LIMIT_TIME, max: REQUEST_LIMIT_NUMBER });
-app.use(limiter);
+
 
 
 // Web cache validation and conditional requests in Http

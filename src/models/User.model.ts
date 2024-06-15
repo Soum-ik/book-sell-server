@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
+
 export interface User extends Document {
     username: string,
     email: string,
@@ -10,7 +11,7 @@ export interface User extends Document {
     image: string,
     role: string,
     suspend: boolean,
-    isVerificationCodeExpired: () => boolean
+    isVerfiyed: boolean,
 }
 
 const UserSchema: Schema<User> = new Schema({
@@ -28,7 +29,8 @@ const UserSchema: Schema<User> = new Schema({
     },
     password: {
         type: String,
-        required: [true, "Password is required"]
+        required: [true, "Password is required"],
+        minlength: 8
     },
     verfiyCode: {
         type: String,
@@ -54,6 +56,10 @@ const UserSchema: Schema<User> = new Schema({
         required: [true, "Role is required"],
         default: "USER"
     },
+    isVerfiyed: {
+        type: Boolean,
+        default: false,
+    },
     suspend: {
         type: Boolean,
         required: true,
@@ -64,9 +70,6 @@ const UserSchema: Schema<User> = new Schema({
     versionKey: false
 });
 
-UserSchema.methods.isVerificationCodeExpired = function (): boolean {
-    return this.verfiyCodeExpier && this.verfiyCodeExpier < new Date();
-};
 
 const Users = mongoose.model<User>("Users", UserSchema);
 export default Users;

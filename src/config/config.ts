@@ -5,10 +5,10 @@ export const MONGODB_CONNECTION = "mongodb+srv://soum-ik:frontenddev@cluster0.du
 export const JWT_SECRET = "5EC7CEFA1BE7C9354A639369A2AA8";
 export const JWT_EXPIRATION_TIME = 24 * 60 * 60; // 1 Days
 
-export const EMAIL_HOST = "";
+export const EMAIL_HOST = "sarkarsoumik215@gmail.com";
 export const EMAIL_PORT = "";
-export const EMAIL_USER = "";
-export const EMAIL_PASSWORD = "";
+export const EMAIL_USER = "sarkarsoumik215@gmail.com";
+export const EMAIL_PASSWORD = "unyn oiqq kavj awzj";
 
 export const MAX_JSON_SIZE = "50mb";
 export const URL_ENCODED = true;
@@ -19,4 +19,4 @@ export const REQUEST_LIMIT_NUMBER = 3000; // Per 15 Min 3000 Request Allowed
 export const WEB_CACHE = false;
 
 export const PORT = 6969;
-
+export const RESEND_API_KEY = "re_R83HxEnd_Am5p3SgxLfQWcYTACs3AgqFg"
