@@ -25,6 +25,7 @@
 
     // Node.js specific settings
     "esModuleInterop": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   }
 }

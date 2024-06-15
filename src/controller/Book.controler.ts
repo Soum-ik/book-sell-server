@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 import Book from "../models/Book.model";
 import sendResponse from '../libs/utility/sendResponse';
-import type { Request, Response } from 'express';
+import { raw, type Request, type Response } from 'express';
 import Books from "../models/Book.model";
 import Users from "../models/User.model";
 
@@ -10,7 +10,10 @@ import Users from "../models/User.model";
 // create post
 const createPost = async (req: Request, res: Response) => {
     try {
-        const { images, semester, totalBook, price, urgent, message, userId, isAvaiableFullSet } = req.body;
+        const userId = req.user?.user_id;
+        console.log(userId, "checking user id");
+        
+        const { images, semester, totalBook, price, urgent, message, isAvaiableFullSet } = req.body;
 
         if (images.length > 5 && images.length < 3) {
             console.log('error on image');
