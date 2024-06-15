@@ -7,6 +7,7 @@ export interface User extends Document {
     password: string,
     verfiyCode?: string,
     verfiyCodeExpier?: Date,
+    semester: string,
     number: string,
     image: string,
     role: string,
@@ -31,6 +32,10 @@ const UserSchema: Schema<User> = new Schema({
         type: String,
         required: [true, "Password is required"],
         minlength: 8
+    },
+    semester: {
+        type: String,
+        required: [true, "Semester is required"],
     },
     verfiyCode: {
         type: String,

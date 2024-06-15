@@ -38,7 +38,8 @@ const BookSchema: Schema<Book> = new Schema<Book>({
     },
     price: {
         type: String,
-        required: [true, "Price is required"]
+        required: [true, "Price is required"],
+        maxlength: 3
     },
     urgent: {
         type: Boolean,

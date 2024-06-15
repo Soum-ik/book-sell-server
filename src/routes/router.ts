@@ -10,6 +10,8 @@ router.patch('/sign-in', UserController.SignIn);
 
 // create books api route
 router.post('/create-post', BookController.createPost);
+router.get('/get-post', BookController.getPost);
+router.patch('/get-singel-post/:id', BookController.getSingelPost);
 
 
 export default router
