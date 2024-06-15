@@ -1,13 +1,15 @@
-// auth.js
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET, JWT_EXPIRATION_TIME } from '../../../config/config';
 
 interface TokenCredential {
-    user_id: string;
+    user_id: String
+    role: String
+    isVerfiyed: Boolean
+    suspend: Boolean
 }
 
-export const createToken = ({ user_id }: TokenCredential) => {
-    const payload = { user_id };
+export const createToken = ({ user_id, isVerfiyed, role, suspend }: TokenCredential) => {
+    const payload = { user_id, isVerfiyed, role, suspend };
     const options = { expiresIn: JWT_EXPIRATION_TIME };
     const token = jwt.sign(payload, JWT_SECRET, options);
     return token;

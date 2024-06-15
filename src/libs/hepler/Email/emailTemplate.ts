@@ -3,7 +3,7 @@
 interface TemplateCredentials {
     name: String,
     image: String,
-    link?: String
+    code: String
 }
 
 export const emailTemplate = (data: TemplateCredentials) => {
@@ -75,7 +75,7 @@ export const emailTemplate = (data: TemplateCredentials) => {
         <div class="content">
             <h1>Welcome, ${data.name}!</h1>
             <p>Thank you for signing up. Please verify your email address by clicking the button below:</p>
-            <a  href=${data.link} class="button">Verify Email</a>
+            <a  href=${data.code} class="button">Verify Email</a>
             <p>If you did not sign up for this account, please ignore this email.</p>
         </div>
         <div class="footer">

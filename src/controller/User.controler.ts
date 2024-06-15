@@ -4,13 +4,9 @@ import sendResponse from '../libs/utility/sendResponse';
 import httpStatus from 'http-status';
 import sendEmail from '../libs/hepler/Email/emaliSend';
 import bcrypt from "bcrypt"
+import { createToken } from '../libs/hepler/auth/jwtHelper';
 
-const getUser = async (req: Request, res: Response) => {
-    const result = await Users.find();
-    sendResponse<any>(res, {
-        statusCode: httpStatus.OK, success: true, data: result, message: "Find Data Successfully",
-    })
-}
+
 
 const SingUp = async (req: Request, res: Response) => {
     try {
@@ -85,9 +81,43 @@ const SingUp = async (req: Request, res: Response) => {
 
 }
 
+const SignIn = async (req: Request, res: Response) => {
+    try {
+        const { password, email } = req.body;
 
+        const findUserByEmail = await Users.findOne({ email });
+        if (!findUserByEmail) {
+            return sendResponse(res, {
+                statusCode: httpStatus.UNAUTHORIZED, success: false, data: null, message: "User not found"
+            });
+        }
 
+        const { password: hashPassword } = findUserByEmail;
+        const isPasswordMatch = await bcrypt.compare(password, hashPassword);
+        if (!isPasswordMatch) {
+            return sendResponse(res, {
+                statusCode: httpStatus.UNAUTHORIZED, success: false, data: null, message: "Password doesn't match."
+            });
+        }
 
+        const { suspend, isVerfiyed, role } = findUserByEmail
 
+        // Convert user ID to string
+        const user_id = findUserByEmail._id.toString();
 
-export default { SingUp, getUser }
+        // Create the token
+        const token = createToken({ isVerfiyed, role, suspend, user_id });
+
+       
+
+        return sendResponse(res, {
+            statusCode: httpStatus.OK, success: true, data: { token }, message: "User authenticated successfully"
+        });
+    } catch (error) {
+        return sendResponse(res, {
+            statusCode: httpStatus.INTERNAL_SERVER_ERROR, success: false, data: error, message: "An error occurred"
+        });
+    }
+}
+
+export default { SingUp, SignIn }authenticate 
