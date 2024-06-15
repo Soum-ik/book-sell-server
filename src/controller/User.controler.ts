@@ -120,4 +120,4 @@ const SignIn = async (req: Request, res: Response) => {
     }
 }
 
-export default { SingUp, SignIn }authenticate 
+export default { SingUp, SignIn } 

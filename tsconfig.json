@@ -4,7 +4,7 @@
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "module": "ESNext",
-    "moduleDetection": "force",
+    "moduleResolution": "Node", // Use 'node' for backend Node.js modules
     "jsx": "react-jsx",
     "allowJs": true,
 
@@ -22,6 +22,10 @@
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false
+    "noPropertyAccessFromIndexSignature": false,
+
+    // Node.js specific settings
+    "esModuleInterop": true,
+    "outDir": "./dist"
   }
 }

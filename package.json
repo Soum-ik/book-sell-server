@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "bun --watch run ./src/app.ts",
     "clean": "rm -rf dist && echo 'Done.'",
-    "start": "bun build ./src/app.ts --outdir dist/app.ts"
+    "start": "bun build ./src/app.ts --outdir dist/app.ts --target node"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@types/cors": "^2.8.17",
+    "aws-sdk": "^2.1642.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -29,7 +30,9 @@
     "helmet": "^7.1.0",
     "http-status": "^1.7.4",
     "jsonwebtoken": "^9.0.2",
+    "mock-aws-s3": "^4.0.2",
     "mongoose": "^8.4.1",
+    "nock": "^13.5.4",
     "nodemailer": "^6.9.13",
     "zod": "^3.23.8"
   }
