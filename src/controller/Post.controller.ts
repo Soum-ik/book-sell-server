@@ -85,7 +85,7 @@ const getSingelPost = async (req: Request, res: Response) => {
 
         const userId = post.userId;
 
-        const user = await Users.findById(userId)
+        const user = await Users.findById(userId, { isVerfiyed: true })
         const Datas = { post, user }
 
 

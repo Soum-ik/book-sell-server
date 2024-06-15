@@ -10,7 +10,8 @@ export interface Post extends Document {
     urgent: boolean,
     message: string,
     isAvaiableFullSet: boolean,
-    isAccept: boolean
+    isAccept: boolean,
+    sold: boolean,
 }
 
 const PostSchema: Schema<Post> = new Schema<Post>({
@@ -57,6 +58,10 @@ const PostSchema: Schema<Post> = new Schema<Post>({
     isAvaiableFullSet: {
         type: Boolean,
         required: [true, "isAvaiableFullSet is required"]
+    },
+    sold: {
+        type: Boolean,
+        default: false,
     }
 }, {
     timestamps: true,
