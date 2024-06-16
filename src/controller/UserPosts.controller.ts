@@ -6,8 +6,6 @@ import Post from '../models/Post.model';
 const getAllPost = async (req: Request, res: Response) => {
     const user_id = req.user?.user_id
     const verfiyed = req.user?.isVerfiyed
-    console.log(user_id, "user id");
-    console.log(verfiyed, "user");
 
     try {
         if (!verfiyed) {

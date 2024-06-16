@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET, JWT_EXPIRATION_TIME } from '../../../config/config';
 
-interface TokenCredential {
+export interface TokenCredential {
     user_id: String
     role: String
     isVerfiyed: Boolean

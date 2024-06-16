@@ -3,6 +3,7 @@ import UserController from '../controller/User.controller'
 import PostController from '../controller/Post.controller'
 import UserPostController from '../controller/UserPosts.controller'
 import authenticateToken from '../middleware/auth';
+import authenticateAdminToken from '../middleware/admin';
 
 const router = express.Router()
 
@@ -16,6 +17,6 @@ router.get('/get-post',authenticateToken, PostController.getPost);
 router.patch('/get-singel-post/:id', authenticateToken, PostController.getSingelPost);
 
 // get user post api 
-router.post("/get-user-all-post", authenticateToken, UserPostController.getAllPost)
+router.post("/get-user-all-post", authenticateAdminToken, UserPostController.getAllPost)
 
 export default router

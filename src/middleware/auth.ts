@@ -23,8 +23,6 @@ const authenticateToken = async (req: Request, res: Response, next: NextFunction
         });
     }
 
-
-
     req.user = decoded as JwtPayload
     next()
 

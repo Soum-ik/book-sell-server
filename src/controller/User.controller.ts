@@ -82,6 +82,8 @@ const SignIn = async (req: Request, res: Response) => {
 
         const findUserByEmail = await Users.findOne({ email });
 
+        console.log(findUserByEmail, "check sign in data");
+        
 
 
         if (!findUserByEmail) {
