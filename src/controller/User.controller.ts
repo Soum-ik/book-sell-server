@@ -8,7 +8,7 @@ import { createToken } from '../libs/hepler/auth/jwtHelper';
 
 const SingUp = async (req: Request, res: Response) => {
     try {
-        const { username, email, password, number, image } = await req.body;
+        const { username, email, password, number, image, semester } = await req.body;
 
         const userNameExist = await Users.findOne({
             username
@@ -56,7 +56,8 @@ const SingUp = async (req: Request, res: Response) => {
                 image: image,
                 number: number,
                 verfiyCode: verfiyCode,
-                verfiyCodeExpier: verfiyCodeExpier
+                verfiyCodeExpier: verfiyCodeExpier,
+                semester
             })
 
             // Send verification email
@@ -83,7 +84,7 @@ const SignIn = async (req: Request, res: Response) => {
         const findUserByEmail = await Users.findOne({ email });
 
         console.log(findUserByEmail, "check sign in data");
-        
+
 
 
         if (!findUserByEmail) {

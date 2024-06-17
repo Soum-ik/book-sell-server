@@ -1,13 +1,15 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 
+export type Semesters = '1st' | '2nd' | '3rd' | '4th' | '5th' | '6th' | '7th'
+
 export interface User extends Document {
     username: string,
     email: string,
     password: string,
     verfiyCode?: string,
     verfiyCodeExpier?: Date,
-    semester: string,
+    semester: Semesters,
     number: string,
     image: string,
     role: string,
@@ -35,6 +37,7 @@ const UserSchema: Schema<User> = new Schema({
     },
     semester: {
         type: String,
+        enum: ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'],
         required: [true, "Semester is required"],
     },
     verfiyCode: {

@@ -1,10 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+ 
+
+export type Semesters = '1st' | '2nd' | '3rd' | '4th' | '5th' | '6th' | '7th'
 
 export interface Post extends Document {
     images: string[],
     userId: string,
-    semester: string,
+    semester: Semesters,
     totalBook: string,
     price: number,
     urgent: boolean,
