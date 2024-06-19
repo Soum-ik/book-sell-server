@@ -66,6 +66,5 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.listen(PORT, async () => {
     await dbConnection()
-    console.log(`🛢   Database has been connected successfully`);
     console.log(`Application  listening on port ${PORT}`);
 })
