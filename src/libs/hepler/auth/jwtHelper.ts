@@ -11,8 +11,12 @@ export interface TokenCredential {
 export const createToken = ({ user_id, isVerfiyed, role, suspend }: TokenCredential) => {
     const payload = { user_id, isVerfiyed, role, suspend };
     const options = { expiresIn: JWT_EXPIRATION_TIME };
-    const token = jwt.sign(payload, JWT_SECRET, options);
-    return token;
+    try {
+        const token = jwt.sign(payload, JWT_SECRET, options);
+        return token;
+    } catch (error) {
+        console.error('Token not created:', error);
+    }
 };
 
 export const verifyToken = (token: string) => {

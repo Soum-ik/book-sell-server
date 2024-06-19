@@ -5,26 +5,33 @@ import sendResponse from "../libs/utility/sendResponse"
 import type { JwtPayload } from "jsonwebtoken"
 
 const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader
+    const authHeader = req.headers.authorization;
+    if (typeof authHeader === 'string') {
+        const token = authHeader.split(' ')[1]
 
-    if (!token) {
-        return sendResponse<any>(res, {
-            statusCode: NOT_FOUND,
-            success: false,
-        })
-    }
-    const decoded = verifyToken(token);
-    if (!decoded) {
-        return sendResponse(res, {
+        if (!token) {
+            return sendResponse(res, {
+                statusCode: NOT_FOUND,
+                success: false,
+                message: 'Token not found'
+            });
+        }
+        const decoded = verifyToken(token);
+        if (!decoded) {
+            return sendResponse(res, {
+                statusCode: httpStatus.FORBIDDEN,
+                success: false,
+                message: 'Token is invalid',
+            });
+        }
+        req.user = decoded as JwtPayload
+        next()
+    } else {
+        sendResponse(res, {
             statusCode: httpStatus.FORBIDDEN,
             success: false,
-            message: 'Token is invalid',
+            message: 'Something want wrong',
         });
     }
-
-    req.user = decoded as JwtPayload
-    next()
-
 }
 export default authenticateToken
