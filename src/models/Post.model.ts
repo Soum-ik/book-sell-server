@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
- 
+
 
 export type Semesters = '1st' | '2nd' | '3rd' | '4th' | '5th' | '6th' | '7th'
 
@@ -15,6 +15,9 @@ export interface Post extends Document {
     isAvaiableFullSet: boolean,
     isAccept: boolean,
     sold: boolean,
+    comment?: string[],
+    like?: number,
+    bookmark?: number,
 }
 
 const PostSchema: Schema<Post> = new Schema<Post>({
@@ -65,7 +68,16 @@ const PostSchema: Schema<Post> = new Schema<Post>({
     sold: {
         type: Boolean,
         default: false,
-    }
+    },
+    comment: {
+        type: [String],
+    },
+    like: {
+        type: Number,
+    },
+    bookmark: {
+        type: Number
+    },
 }, {
     timestamps: true,
     versionKey: false
