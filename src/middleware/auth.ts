@@ -7,7 +7,7 @@ import type { JwtPayload } from "jsonwebtoken"
 const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     if (typeof authHeader === 'string') {
-        const token = authHeader.split(' ')[1]
+        const token = authHeader.split(' ')[1] || authHeader
 
         if (!token) {
             return sendResponse(res, {
@@ -24,6 +24,8 @@ const authenticateToken = async (req: Request, res: Response, next: NextFunction
                 message: 'Token is invalid',
             });
         }
+        console.log(decoded, 'authoraised');
+
         req.user = decoded as JwtPayload
         next()
     } else {
