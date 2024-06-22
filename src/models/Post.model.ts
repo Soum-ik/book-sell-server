@@ -8,7 +8,7 @@ export interface Post extends Document {
     images: string[],
     userId: string,
     semester: Semesters,
-    totalBook: string,
+    totalBook: number,
     price: number,
     urgent: boolean,
     message: string,
@@ -40,7 +40,7 @@ const PostSchema: Schema<Post> = new Schema<Post>({
         required: [true, "Semester is required"]
     },
     totalBook: {
-        type: String,
+        type: Number,
         required: [true, "Total book count is required"]
     },
     price: {

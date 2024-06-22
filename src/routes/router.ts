@@ -10,10 +10,11 @@ const router = express.Router()
 // get users api route
 router.post('/sign-up', UserController.SingUp);
 router.post('/sign-in', UserController.SignIn);
+router.get('/user/:id', UserController.getUser);
 
 // create Posts api route
 router.post('/create-post', authenticateToken, PostController.createPost);
-router.get('/get-post',authenticateToken, PostController.getPost);
+router.get('/get-post', authenticateToken, PostController.getPost);
 router.patch('/get-singel-post/:id', authenticateToken, PostController.getSingelPost);
 
 // get user post api 

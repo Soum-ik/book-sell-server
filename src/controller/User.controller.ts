@@ -119,4 +119,16 @@ const SignIn = async (req: Request, res: Response) => {
     }
 }
 
-export default { SingUp, SignIn } 
+const getUser = async (req: Request, res: Response) => {
+    const userId = req.params.id;
+    try {
+        const findUserById = await Users.findById(userId);
+        console.log(findUserById, 'get user');
+        return sendResponse<any>(res, { statusCode: httpStatus.OK, success: true, data: findUserById, message: 'Get user successfully' })
+    } catch (error) {
+        return sendResponse<any>(res, { statusCode: httpStatus.FORBIDDEN, success: true, data: error, message: 'Forbidden', })
+    }
+
+}
+
+export default { SingUp, SignIn, getUser } 
