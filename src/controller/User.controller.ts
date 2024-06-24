@@ -5,11 +5,13 @@ import httpStatus from 'http-status';
 import sendEmail from '../libs/hepler/Email/emaliSend';
 import bcrypt from "bcrypt"
 import { createToken } from '../libs/hepler/auth/jwtHelper';
+import { relativeDate } from '../libs/hepler/validation/validation';
+import { compareAsc } from 'date-fns';
+
 
 const SingUp = async (req: Request, res: Response) => {
     try {
         const { username, email, password, number, image, semester } = await req.body;
-
         const userNameExist = await Users.findOne({
             username
         })
@@ -25,7 +27,7 @@ const SingUp = async (req: Request, res: Response) => {
 
         // checking Exist User by name
         if (userNameExist) {
-            sendResponse<any>(res, {
+            return sendResponse<any>(res, {
                 statusCode: httpStatus.NOT_ACCEPTABLE, success: false, message: "User name is already used"
             })
 
@@ -33,7 +35,7 @@ const SingUp = async (req: Request, res: Response) => {
 
         // checking Exist User by email
         if (emailExist) {
-            sendResponse<any>(res, {
+            return sendResponse<any>(res, {
                 statusCode: httpStatus.NOT_ACCEPTABLE, success: false, message: "This email already use"
             })
 
@@ -41,13 +43,13 @@ const SingUp = async (req: Request, res: Response) => {
 
         // checking Exist email and verified
         if (emailExist?.isVerfiyed) {
-            sendResponse<any>(res, {
+            return sendResponse<any>(res, {
                 statusCode: httpStatus.NOT_ACCEPTABLE, success: false, message: "User already Vefiyed!"
             })
         } else {
             // hash password
             const hashPassword: String = await bcrypt.hash(password, 10)
-            console.log(hashPassword, "hashpassword");
+
 
             const newUser = await Users.create({
                 username: username,
@@ -61,16 +63,16 @@ const SingUp = async (req: Request, res: Response) => {
             })
 
             // Send verification email
-            await sendEmail({ image: image, name: username, receiver: email, subject: "Email Verfication", code: verfiyCode })
+            await sendEmail({ image: image, name: username, receiver: email, subject: "Email Verfication", code: verfiyCode, })
 
-            sendResponse<any>(res, {
+            return sendResponse<any>(res, {
                 statusCode: httpStatus.OK, success: true, data: newUser, message: "Create Data Successfully",
             })
 
         }
 
     } catch (error) {
-        sendResponse<any>(res, {
+        return sendResponse<any>(res, {
             statusCode: httpStatus.UNAUTHORIZED, success: true, data: error, message: "User not Created"
         })
     }
@@ -108,6 +110,13 @@ const SignIn = async (req: Request, res: Response) => {
         const token = createToken({ isVerfiyed, role, suspend, user_id: id });
 
 
+        // Set the cookie with the token
+        res.cookie('authToken', token, {
+            httpOnly: true, // Cookie cannot be accessed via JavaScript
+            // secure: process.env.NODE_ENV === 'production', // Cookie only sent over HTTPS in production
+            maxAge: 3600000, // 1 hour (cookie expiration)
+            sameSite: 'strict', // Protect against CSRF attacks
+        });
 
         return sendResponse<any>(res, {
             statusCode: httpStatus.OK, success: true, data: { token }, message: "User authenticated successfully"
@@ -131,4 +140,37 @@ const getUser = async (req: Request, res: Response) => {
 
 }
 
-export default { SingUp, SignIn, getUser } 
+const verifiyUser = async (req: Request, res: Response) => {
+    const reqPerams = req.params.otp;
+    const findByOTP = await Users.findOne({
+        'verfiyCode': reqPerams
+    })
+    if (!findByOTP) {
+        return sendResponse<any>(res, { statusCode: httpStatus.NOT_FOUND, success: false, data: findByOTP, message: 'OTP are not matched', })
+    } else {
+        const { verfiyCodeExpier, createdAt } = findByOTP;
+        const created_date = relativeDate(createdAt)
+        const Expier_date = relativeDate(verfiyCodeExpier)
+
+        if (created_date >= Expier_date) {
+            return sendResponse<any>(res, { statusCode: httpStatus.EXPECTATION_FAILED, success: false, message: 'OTP are unvalid, time over', })
+        } else {
+            const verified = await Users.updateOne({
+                'verfiyCode': reqPerams,
+            }, { isVerfiyed: true })
+
+            console.log(verified, 'true');
+
+            if (verified.modifiedCount === 1) {
+                const verifiedData = await Users.updateOne({'verfiyCode': reqPerams}, { verfiyCode: null, verfiyCodeExpier: null })
+                console.log(verifiedData, 'clear');
+                return sendResponse<any>(res, { statusCode: httpStatus.OK, success: true, message: 'User Verifiyed Successfully', })
+            } else {
+                return sendResponse<any>(res, { statusCode: httpStatus.NOT_ACCEPTABLE, success: false, message: 'Forbidden' })
+            }
+        }
+
+    }
+}
+
+export default { SingUp, SignIn, getUser, verifiyUser } 

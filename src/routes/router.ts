@@ -12,12 +12,15 @@ router.post('/sign-up', UserController.SingUp);
 router.post('/sign-in', UserController.SignIn);
 router.get('/user/:id', UserController.getUser);
 
+// verifiy user
+router.get('/verifi-user/:otp', UserController.verifiyUser)
+
 // create Posts api route
-router.post('/create-post', authenticateToken, PostController.createPost);
-router.get('/get-post', authenticateToken, PostController.getPost);
-router.patch('/get-singel-post/:id', authenticateToken, PostController.getSingelPost);
+router.post('/create-post', PostController.createPost);
+router.get('/get-post', PostController.getPost);
+router.patch('/get-singel-post/:id', PostController.getSingelPost);
 
 // get user post api 
-router.post("/get-user-all-post", authenticateAdminToken, UserPostController.getAllPost)
+router.post("/get-user-all-post", UserPostController.getAllPost)
 
 export default router

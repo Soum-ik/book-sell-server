@@ -82,7 +82,7 @@ export const emailTemplate = (data: TemplateCredentials) => {
 
         <h1> Welcome ${data.name}. Thank you for comming</h1>
         <h2>Confirm Your Email</h2>
-        <p>Thank you for signing up! Please use the verification code below to activate your account:</p>
+        <p>Thank you for signing up! Please use the verification code below to activate your account. This Verification code will be active next 1 hours.</p>
         <div class="verification-code">
             <!-- Replace this text with the actual verification code dynamically generated in your application -->
            ${data.code}

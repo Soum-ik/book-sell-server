@@ -11,7 +11,7 @@ export interface User extends Document {
     verfiyCodeExpier?: Date,
     semester: Semesters,
     number: string,
-    image: string,
+    image?: string,
     role: string,
     suspend: boolean,
     isVerfiyed: boolean,
@@ -56,7 +56,6 @@ const UserSchema: Schema<User> = new Schema({
     },
     image: {
         type: String,
-        required: [true, "Image is required"]
     },
     role: {
         type: String,
