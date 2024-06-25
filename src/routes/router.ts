@@ -13,7 +13,9 @@ router.post('/sign-in', UserController.SignIn);
 router.get('/user/:id', UserController.getUser);
 
 // verifiy user
+router.get('/forgot-pass/:email', UserController.forgotPass)
 router.get('/verifi-user/:otp', UserController.verifiyUser)
+router.put('/new-pass/:email/:password', UserController.setNewPass)
 
 // create Posts api route
 router.post('/create-post', PostController.createPost);

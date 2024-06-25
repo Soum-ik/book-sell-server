@@ -4,7 +4,7 @@ import { EMAIL_HOST, EMAIL_PASSWORD } from "../../../config/config";
 
 interface EmailCredentials {
     receiver: string; // Corrected the typo from "revicer" to "receiver"
-    image: string;
+    image?: string;
     name: string;
     subject: string;
     code: string;

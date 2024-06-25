@@ -6,7 +6,7 @@ import sendEmail from '../libs/hepler/Email/emaliSend';
 import bcrypt from "bcrypt"
 import { createToken } from '../libs/hepler/auth/jwtHelper';
 import { relativeDate } from '../libs/hepler/validation/validation';
-import { compareAsc } from 'date-fns';
+import { compareAsc, endOfISOWeekYear } from 'date-fns';
 
 
 const SingUp = async (req: Request, res: Response) => {
@@ -84,11 +84,6 @@ const SignIn = async (req: Request, res: Response) => {
         const { password, email } = req.body;
 
         const findUserByEmail = await Users.findOne({ email });
-
-        console.log(findUserByEmail, "check sign in data");
-
-
-
         if (!findUserByEmail) {
             return sendResponse<any>(res, {
                 statusCode: httpStatus.UNAUTHORIZED, success: false, data: null, message: "User not found"
@@ -162,7 +157,7 @@ const verifiyUser = async (req: Request, res: Response) => {
             console.log(verified, 'true');
 
             if (verified.modifiedCount === 1) {
-                const verifiedData = await Users.updateOne({'verfiyCode': reqPerams}, { verfiyCode: null, verfiyCodeExpier: null })
+                const verifiedData = await Users.updateOne({ 'verfiyCode': reqPerams }, { verfiyCode: null, verfiyCodeExpier: null })
                 console.log(verifiedData, 'clear');
                 return sendResponse<any>(res, { statusCode: httpStatus.OK, success: true, message: 'User Verifiyed Successfully', })
             } else {
@@ -173,4 +168,69 @@ const verifiyUser = async (req: Request, res: Response) => {
     }
 }
 
-export default { SingUp, SignIn, getUser, verifiyUser } 
+// recover pass
+const forgotPass = async (req: Request, res: Response) => {
+    const reqPerams = req.params.email;
+
+    const findByEmail = await Users.findOne({ email: reqPerams });
+    if (!findByEmail) {
+        return sendResponse<any>(res, { statusCode: httpStatus.NOT_FOUND, success: false, message: 'This email is not register', })
+    } else {
+        const verfiyCode = Math.floor(1000000 + Math.random() * 9000000).toString()
+        const verfiyCodeExpier = new Date()
+        verfiyCodeExpier.setHours(verfiyCodeExpier.getHours() + 1)
+
+        const { image, username, email } = findByEmail
+
+        const updateUserOtp = await Users.updateOne({
+            email: reqPerams
+        }, {
+            verfiyCode: verfiyCode,
+            verfiyCodeExpier: verfiyCodeExpier
+        })
+        // Send verification email
+        await sendEmail({ image: image, name: username, receiver: email, subject: "Email Verfication", code: verfiyCode })
+        return sendResponse<any>(res, {
+            statusCode: httpStatus.OK, success: true, data: updateUserOtp, message: "Email are matched, Check your mail & verify user code",
+        })
+    }
+}
+
+const verfiyPass = async (req: Request, res: Response) => {
+    const reqPerams = req.params.otp;
+    const findByOTP = await Users.findOne({
+        'verfiyCode': reqPerams
+    })
+    if (!findByOTP) {
+        return sendResponse<any>(res, { statusCode: httpStatus.NOT_FOUND, success: false, data: findByOTP, message: 'OTP are not matched', })
+    } else {
+        const { verfiyCodeExpier, createdAt } = findByOTP;
+        const created_date = relativeDate(createdAt)
+        const Expier_date = relativeDate(verfiyCodeExpier)
+
+        if (created_date >= Expier_date) {
+            return sendResponse<any>(res, { statusCode: httpStatus.EXPECTATION_FAILED, success: false, message: 'OTP are unvalid, time over', })
+        } else {
+            return sendResponse<any>(res, { statusCode: httpStatus.OK, success: true, message: 'OTP are Matched' })
+        }
+    }
+}
+
+const setNewPass = async (req: Request, res: Response) => {
+    const { email, password } = req.params;
+    const findByEmail = await Users.findOne({ email: email });
+    if (!findByEmail) {
+        return sendResponse<any>(res, { statusCode: httpStatus.NOT_FOUND, success: false, message: 'Your email are not matched', })
+    } else {
+        const hashPassword: String = await bcrypt.hash(password, 10)
+
+        const updateNewPass = await Users.updateOne({ email: email }, { password: hashPassword });
+        if (updateNewPass.matchedCount === 1) {
+            return sendResponse<any>(res, { statusCode: httpStatus.OK, success: true, message: 'Your new password set successfully', })
+        } else {
+            return sendResponse<any>(res, { statusCode: httpStatus.NOT_FOUND, success: false, message: 'Something want wrong, your password not update', })
+        }
+    }
+}
+
+export default { SingUp, SignIn, getUser, verifiyUser, forgotPass, verfiyPass, setNewPass }
