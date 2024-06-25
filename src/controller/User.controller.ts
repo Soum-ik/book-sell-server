@@ -170,11 +170,15 @@ const verifiyUser = async (req: Request, res: Response) => {
 
 // recover pass
 const forgotPass = async (req: Request, res: Response) => {
-    const reqPerams = req.params.email;
+    const { email } = req.params;
 
-    const findByEmail = await Users.findOne({ email: reqPerams });
+    console.log(email, 'pearms');
+
+    const findByEmail = await Users.findOne({ email: email });
+    console.log(findByEmail, 'find email');
+
     if (!findByEmail) {
-        return sendResponse<any>(res, { statusCode: httpStatus.NOT_FOUND, success: false, message: 'This email is not register', })
+        return sendResponse<any>(res, { statusCode: httpStatus.NOT_FOUND, success: false, message: 'This email is not register &', })
     } else {
         const verfiyCode = Math.floor(1000000 + Math.random() * 9000000).toString()
         const verfiyCodeExpier = new Date()
@@ -183,7 +187,7 @@ const forgotPass = async (req: Request, res: Response) => {
         const { image, username, email } = findByEmail
 
         const updateUserOtp = await Users.updateOne({
-            email: reqPerams
+            email: email
         }, {
             verfiyCode: verfiyCode,
             verfiyCodeExpier: verfiyCodeExpier

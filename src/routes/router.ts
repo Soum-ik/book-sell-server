@@ -7,18 +7,22 @@ import authenticateAdminToken from '../middleware/admin';
 
 const router = express.Router()
 
-// get users api route
+// get users api route -done
 router.post('/sign-up', UserController.SingUp);
 router.post('/sign-in', UserController.SignIn);
 router.get('/user/:id', UserController.getUser);
 
-// verifiy user
-router.get('/forgot-pass/:email', UserController.forgotPass)
+// verifiy user -done
 router.get('/verifi-user/:otp', UserController.verifiyUser)
+
+// forget password  -done
+router.get('/forgot-pass/:email', UserController.forgotPass)
+router.get('/verifi-pass/:otp', UserController.verfiyPass)
 router.put('/new-pass/:email/:password', UserController.setNewPass)
 
+
 // create Posts api route
-router.post('/create-post', PostController.createPost);
+router.post('/create-post', authenticateToken, PostController.createPost);
 router.get('/get-post', PostController.getPost);
 router.patch('/get-singel-post/:id', PostController.getSingelPost);
 

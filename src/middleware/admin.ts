@@ -5,49 +5,43 @@ import sendResponse from "../libs/utility/sendResponse"
 import { decode, type JwtPayload } from "jsonwebtoken"
 
 const authenticateAdminToken = async (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader
+    const authHeader = req.headers.authorization;
+    if (typeof authHeader === 'string') {
+        const token = authHeader.split(' ')[1] || authHeader
 
-    if (!token) {
-        return sendResponse<any>(res, {
-            statusCode: NOT_FOUND,
-            success: false,
-            message: "Token not found"
-        })
-    }
-
-    let decoded: TokenCredential | null = null;
-
-
-    try {
-        const result = verifyToken(token);
-        if (result && typeof result !== 'string') {
-            decoded = result as TokenCredential;
-        } else {
-            throw new Error('Invalid token format');
+        if (!token) {
+            return sendResponse(res, {
+                statusCode: NOT_FOUND,
+                success: false,
+                message: 'Token not found'
+            });
         }
-    } catch (error) {
-        return sendResponse(res, {
+        const decoded = verifyToken(token);
+        if (!decoded) {
+            return sendResponse(res, {
+                statusCode: httpStatus.FORBIDDEN,
+                success: false,
+                message: 'Token is invalid',
+            });
+        }
+        const { role } = decode
+        if (role !== "ADMIN") {
+            return sendResponse(res, {
+                statusCode: httpStatus.NOT_ACCEPTABLE,
+                success: false,
+                message: 'Sorry your not admin',
+            });
+        }
+
+        req.user = decoded as JwtPayload
+        next()
+    } else {
+        sendResponse(res, {
             statusCode: httpStatus.FORBIDDEN,
             success: false,
-            message: 'Token is invalid',
+            message: 'Something want wrong',
         });
     }
-    
-    console.log(decoded, "decoded");
-    
-    const role = decoded.role
-
-    if (role !== "ADMIN") {
-        return sendResponse(res, {
-            statusCode: httpStatus.NOT_ACCEPTABLE,
-            success: false,
-            message: 'Sorry your not admin',
-        });
-    }
-
-    req.user = decoded as JwtPayload
-    next()
 
 }
 export default authenticateAdminToken

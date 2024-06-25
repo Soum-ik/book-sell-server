@@ -32,7 +32,7 @@ const authenticateToken = async (req: Request, res: Response, next: NextFunction
         sendResponse(res, {
             statusCode: httpStatus.FORBIDDEN,
             success: false,
-            message: 'Something want wrong',
+            message: 'Something want wrong token',
         });
     }
 }

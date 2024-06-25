@@ -10,7 +10,7 @@ import router from './routes/router';
 const app: Application = express()
 const corsOptions = {
     origin: [
-        'http://localhost:3000',
+        'http://localhost:3000/*path',
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
