@@ -10,7 +10,10 @@ const router = express.Router()
 // get users api route -done
 router.post('/sign-up', UserController.SingUp);
 router.post('/sign-in', UserController.SignIn);
-router.get('/user/:id', UserController.getUser);
+router.get('/user/:id', UserController.getUsers);
+
+// get users profile
+router.get('/verified-user', authenticateToken, UserController.getVerifiedUser)
 
 // verifiy user -done
 router.get('/verifi-user/:otp', UserController.verifiyUser)

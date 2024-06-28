@@ -18,6 +18,7 @@ export interface Post extends Document {
     comment?: string[],
     like?: number,
     bookmark?: number,
+    UserImage?: string
 }
 
 const PostSchema: Schema<Post> = new Schema<Post>({
@@ -64,6 +65,9 @@ const PostSchema: Schema<Post> = new Schema<Post>({
     isAvaiableFullSet: {
         type: Boolean,
         required: [true, "isAvaiableFullSet is required"]
+    },
+    UserImage: {
+        type: String
     },
     sold: {
         type: Boolean,

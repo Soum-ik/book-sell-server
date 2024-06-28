@@ -26,15 +26,16 @@ const createPost = async (req: Request, res: Response) => {
                 message: "Image's Must be more then 3 and less then 5",
             });
         }
+        const { image } = await Users.findById(userId)
 
-        const post = await Post.create({ userId, images, semester, totalBook, price, urgent, message, isAvaiableFullSet });
-        console.log(post, "create post successfully");
+        let create_post = await Post.create({ userId, images, semester, totalBook, price, urgent, message, isAvaiableFullSet, UserImage: image });
+
 
         // Handle successful creation
         return sendResponse<any>(res, {
             statusCode: httpStatus.CREATED,
             success: true,
-            data: post,
+            data: create_post,
             message: "Post created successfully, This is in review section.",
         });
 
@@ -51,7 +52,16 @@ const createPost = async (req: Request, res: Response) => {
 // get all post 
 const getPost = async (req: Request, res: Response) => {
     try {
-        const { semester, minPrice, maxPrice, order } = req.query; // Extract query parameters
+        const { semester, minPrice, maxPrice, order, urgent, isAvaiableFullSet, page = 1, search } = req.query; // Extract query parameters
+
+
+        // Ensure searchString is properly initialized
+        const searchString = search
+            ? search
+                .split(" ")
+                .filter((word: string) => word.length > 0)
+                .join(" & ")
+            : "";
 
         // Customize the semester value
         let custom_semester = '';
@@ -71,9 +81,11 @@ const getPost = async (req: Request, res: Response) => {
                     break;
             }
         }
-
-        // Build the query object based on the provided parameters
         const query: any = { isAccept: true };
+        if (semester) query.semester = custom_semester;
+        if (urgent) query.urgent = urgent;
+        if (isAvaiableFullSet) query.isAvaiableFullSet = isAvaiableFullSet;
+
 
         // Add price range filtering
         if (minPrice || maxPrice) {
@@ -81,17 +93,15 @@ const getPost = async (req: Request, res: Response) => {
             if (minPrice) query.price.$gte = parseInt(minPrice as string);
             if (maxPrice) query.price.$lte = parseInt(maxPrice as string);
         }
-
-        if (semester) query.semester = custom_semester;
-
-        // Define the sort object based on the provided order parameter
         const sort: any = {};
         if (order) {
-            const [sortField, sortOrder] = order.split(':'); // Expecting order to be something like 'price:asc' or 'name:desc'
-            sort[sortField] = sortOrder === 'desc' ? -1 : 1;
+            sort.createdAt = -1;
         } else {
-            sort.date = -1; // Default sorting by date in descending order
+            sort.createdAt = -1;
         }
+        // Define pagination
+        const limit = 10;
+        // const skip = (parseInt(page as string) - 1) * limit;
 
         // Fetch posts with the constructed query and sort criteria
         const getPosts = await Post.find(query).sort(sort);

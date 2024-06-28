@@ -6,8 +6,6 @@ import sendEmail from '../libs/hepler/Email/emaliSend';
 import bcrypt from "bcrypt"
 import { createToken } from '../libs/hepler/auth/jwtHelper';
 import { relativeDate } from '../libs/hepler/validation/validation';
-import { compareAsc, endOfISOWeekYear } from 'date-fns';
-
 
 const SingUp = async (req: Request, res: Response) => {
     try {
@@ -123,7 +121,7 @@ const SignIn = async (req: Request, res: Response) => {
     }
 }
 
-const getUser = async (req: Request, res: Response) => {
+const getUsers = async (req: Request, res: Response) => {
     const userId = req.params.id;
     try {
         const findUserById = await Users.findById(userId);
@@ -222,7 +220,14 @@ const verfiyPass = async (req: Request, res: Response) => {
 
 const setNewPass = async (req: Request, res: Response) => {
     const { email, password } = req.params;
-    const findByEmail = await Users.findOne({ email: email });
+    const findByEmail = await Users.findOne({
+        $or: [{
+            email: email,
+            password: password
+        }]
+    });
+    console.log(findByEmail, 'email');
+    
     if (!findByEmail) {
         return sendResponse<any>(res, { statusCode: httpStatus.NOT_FOUND, success: false, message: 'Your email are not matched', })
     } else {
@@ -237,4 +242,17 @@ const setNewPass = async (req: Request, res: Response) => {
     }
 }
 
-export default { SingUp, SignIn, getUser, verifiyUser, forgotPass, verfiyPass, setNewPass }
+
+// get singel user
+const getVerifiedUser = async (req: Request, res: Response) => {
+    const user_id = req.user?.user_id
+    try {
+        const findUserById = await Users.findById(user_id);
+        return sendResponse<any>(res, { statusCode: httpStatus.OK, success: true, data: findUserById, message: 'Get user successfully' })
+    } catch (error) {
+        return sendResponse<any>(res, { statusCode: httpStatus.FORBIDDEN, success: true, data: error, message: 'Forbidden', })
+    }
+
+}
+
+export default { SingUp, SignIn, getUsers, verifiyUser, forgotPass, verfiyPass, setNewPass, getVerifiedUser }
