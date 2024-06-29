@@ -227,7 +227,7 @@ const setNewPass = async (req: Request, res: Response) => {
         }]
     });
     console.log(findByEmail, 'email');
-    
+
     if (!findByEmail) {
         return sendResponse<any>(res, { statusCode: httpStatus.NOT_FOUND, success: false, message: 'Your email are not matched', })
     } else {
@@ -255,4 +255,20 @@ const getVerifiedUser = async (req: Request, res: Response) => {
 
 }
 
-export default { SingUp, SignIn, getUsers, verifiyUser, forgotPass, verfiyPass, setNewPass, getVerifiedUser }
+
+// profile update 
+const profileUpdate = async (req: Request, res: Response) => {
+    const user_id = req.user?.user_id;
+    const { updateName } = req.params
+    try {
+        const UpdateUser = await Users.findByIdAndUpdate(user_id, { username: updateName })
+        console.log('update user');
+
+        return sendResponse<any>(res, { statusCode: httpStatus.OK, success: true, data: UpdateUser, message: 'Upgrade User Successfully' })
+    } catch (error) {
+        return sendResponse<any>(res, { statusCode: httpStatus.NOT_FOUND, success: true, data: error, message: 'Forbidden', })
+    }
+}
+
+
+export default { SingUp, SignIn, getUsers, verifiyUser, forgotPass, verfiyPass, setNewPass, getVerifiedUser, profileUpdate }

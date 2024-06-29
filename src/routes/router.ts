@@ -24,6 +24,9 @@ router.get('/verifi-pass/:otp', UserController.verfiyPass)
 router.put('/new-pass/:email/:password', UserController.setNewPass)
 
 
+// profile update
+router.get('/profile-update/:updateName', authenticateToken, UserController.profileUpdate)
+
 // create Posts api route
 router.post('/create-post', authenticateToken, PostController.createPost);
 router.get('/get-post', PostController.getPost);
