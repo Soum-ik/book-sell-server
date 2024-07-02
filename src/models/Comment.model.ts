@@ -5,6 +5,7 @@ export interface Comment extends Document {
     postId: mongoose.Schema.Types.ObjectId;
     comments: string;
     userImage?: string;
+    username?: string
 }
 
 const commentSchema: Schema<Comment> = new Schema<Comment>({
@@ -21,6 +22,10 @@ const commentSchema: Schema<Comment> = new Schema<Comment>({
         type: String
     },
     userImage: {
+        type: String,
+        required: false
+    },
+    username: {
         type: String,
         required: false
     }

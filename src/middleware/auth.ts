@@ -24,8 +24,6 @@ const authenticateToken = async (req: Request, res: Response, next: NextFunction
                 message: 'Token is invalid',
             });
         }
-        console.log(decoded, 'authoraised');
-
         req.user = decoded as JwtPayload
         next()
     } else {

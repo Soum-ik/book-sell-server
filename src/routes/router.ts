@@ -39,5 +39,6 @@ router.post("/get-user-all-post", UserPostController.getAllPost)
 // post like & dislike & message options
 router.put('/post-like', authenticateToken, PostLikeController.postLike)
 router.post('/post-comment', authenticateToken, PostCommectController.postComment)
+router.get('/get-comment',   PostCommectController.getComment)
 
 export default router
