@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface Comment extends Document {
     userId: string;
     postId: mongoose.Schema.Types.ObjectId;
-    comments: string[];
+    comments: string;
     userImage?: string;
 }
 
@@ -18,8 +18,7 @@ const commentSchema: Schema<Comment> = new Schema<Comment>({
         required: true
     },
     comments: {
-        type: [String],
-        default: []
+        type: String
     },
     userImage: {
         type: String,

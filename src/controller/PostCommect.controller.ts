@@ -24,7 +24,7 @@ const postComment = async (req: Request, res: Response) => {
         const newComment = new Comment({
             userId,
             postId,
-            comments: [commentText],
+            comments: commentText,
             userImage
         });
 
