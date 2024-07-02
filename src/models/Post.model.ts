@@ -1,24 +1,20 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-
-
-export type Semesters = '1st' | '2nd' | '3rd' | '4th' | '5th' | '6th' | '7th'
+export type Semesters = '1st' | '2nd' | '3rd' | '4th' | '5th' | '6th' | '7th';
 
 export interface Post extends Document {
-    images: string[],
-    userId: string,
-    semester: Semesters,
-    totalBook: number,
-    price: number,
-    urgent: boolean,
-    message: string,
-    isAvaiableFullSet: boolean,
-    isAccept: boolean,
-    sold: boolean,
-    comment?: string[],
-    like?: number,
-    bookmark?: number,
-    UserImage?: string
+    images: string[];
+    userId: string;
+    semester: Semesters;
+    totalBook: number;
+    price: number;
+    urgent: boolean;
+    message: string;
+    isAvaiableFullSet: boolean;
+    isAccept: boolean;
+    sold: boolean;
+    bookmark?: number;
+    UserImage?: string;
 }
 
 const PostSchema: Schema<Post> = new Schema<Post>({
@@ -26,7 +22,7 @@ const PostSchema: Schema<Post> = new Schema<Post>({
         type: [String],
         required: [true, "Images are required"],
         validate: {
-            validator: function (v: String[]) {
+            validator: function (v: string[]) {
                 return v.length >= 3 && v.length <= 5;
             },
             message: "You must upload between 3 and 5 images."
@@ -38,6 +34,7 @@ const PostSchema: Schema<Post> = new Schema<Post>({
     },
     semester: {
         type: String,
+        enum: ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'],
         required: [true, "Semester is required"]
     },
     totalBook: {
@@ -72,12 +69,6 @@ const PostSchema: Schema<Post> = new Schema<Post>({
     sold: {
         type: Boolean,
         default: false,
-    },
-    comment: {
-        type: [String],
-    },
-    like: {
-        type: Number,
     },
     bookmark: {
         type: Number

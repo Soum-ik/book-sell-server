@@ -88,7 +88,7 @@ const SignIn = async (req: Request, res: Response) => {
             });
         }
 
-        const { password: hashPassword } = findUserByEmail;
+        const { password: hashPassword, username, semester, } = findUserByEmail;
         const isPasswordMatch = await bcrypt.compare(password, hashPassword);
         if (!isPasswordMatch) {
             return sendResponse<any>(res, {
@@ -110,6 +110,9 @@ const SignIn = async (req: Request, res: Response) => {
             maxAge: 3600000, // 1 hour (cookie expiration)
             sameSite: 'strict', // Protect against CSRF attacks
         });
+
+        // set logged in user local identifier
+        res.locals.loggedInUser = { username, semester, isVerfiyed, role, suspend, user_id: id };
 
         return sendResponse<any>(res, {
             statusCode: httpStatus.OK, success: true, data: { token }, message: "User authenticated successfully"

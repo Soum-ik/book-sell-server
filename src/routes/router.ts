@@ -3,7 +3,8 @@ import UserController from '../controller/User.controller'
 import PostController from '../controller/Post.controller'
 import UserPostController from '../controller/UserPosts.controller'
 import authenticateToken from '../middleware/auth';
-import authenticateAdminToken from '../middleware/admin';
+import PostLikeController from '../controller/PostLike.controller';
+import PostCommectController from '../controller/PostCommect.controller';
 
 const router = express.Router()
 
@@ -34,5 +35,9 @@ router.patch('/get-singel-post/:id', PostController.getSingelPost);
 
 // get user post api 
 router.post("/get-user-all-post", UserPostController.getAllPost)
+
+// post like & dislike & message options
+router.put('/post-like', authenticateToken, PostLikeController.postLike)
+router.post('/post-comment', authenticateToken, PostCommectController.postComment)
 
 export default router
