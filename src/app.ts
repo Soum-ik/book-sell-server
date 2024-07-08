@@ -4,9 +4,12 @@ import cookieParser from "cookie-parser";
 import httpStatus from "http-status";
 import { PORT, WEB_CACHE } from './config/config';
 import helmet from 'helmet';
+import { Server } from "socket.io"
+import { createServer } from 'node:http';
 
 import { dbConnection } from './libs/utility/db';
 import router from './routes/router';
+import chatSocket from './libs/sockets/chatSocket';
 const app: Application = express()
 const corsOptions = {
     origin: [
@@ -35,7 +38,6 @@ app.set('etag', WEB_CACHE);
 app.use('/api/v1', router)
 
 
-
 // Middleware to handle CORS headers for unsupported routes
 app.use((req: Request, res: Response, next: NextFunction) => {
     res.header(
@@ -61,8 +63,18 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     next();
 });
 
+// Socket connection setup
+const server = createServer(app);
+const io = new Server(server);
+chatSocket(io)
 
-app.listen(PORT, async () => {
-    await dbConnection()
-    console.log(`Application  listening on port ${PORT}`);
-})
+
+server.listen(PORT, async () => {
+    try {
+        await dbConnection();
+        console.log(`Application listening on port ${PORT}`);
+    } catch (error) {
+        console.error('Error connecting to the database', error);
+        process.exit(1);
+    }
+});

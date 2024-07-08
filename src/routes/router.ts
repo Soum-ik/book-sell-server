@@ -6,6 +6,8 @@ import authenticateToken from '../middleware/auth';
 import PostLikeController from '../controller/PostLike.controller';
 import PostCommectController from '../controller/PostCommect.controller';
 
+import chatController from "../controller/Chat.controller";
+
 const router = express.Router()
 
 // get users api route -done
@@ -41,5 +43,11 @@ router.put('/post-like', authenticateToken, PostLikeController.postLike)
 router.get('/get-like', PostLikeController.getLike)
 router.post('/post-comment', authenticateToken, PostCommectController.postComment)
 router.get('/get-comment', PostCommectController.getComment)
+
+
+// 
+
+router.get('/chats', chatController.getChats);
+router.post('/chats', chatController.sendChat);
 
 export default router

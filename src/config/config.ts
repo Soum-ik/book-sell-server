@@ -6,7 +6,6 @@ export const JWT_SECRET = "5EC7CEFA1BE7C9354A639369A2AA8";
 export const JWT_EXPIRATION_TIME = 24 * 60 * 60; // 1 Days
 
 export const EMAIL_HOST = "sarkarsoumik215@gmail.com";
-export const EMAIL_PORT = "";
 export const EMAIL_USER = "sarkarsoumik215@gmail.com";
 export const EMAIL_PASSWORD = "unyn oiqq kavj awzj";
 

@@ -7,7 +7,7 @@ import { type Request, type Response } from 'express';
 import Post from "../models/Post.model";
 import Users from "../models/User.model";
 
-
+   
 
 // create post
 const createPost = async (req: Request, res: Response) => {
